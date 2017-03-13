@@ -72,7 +72,7 @@ public class Dialog_bloodRecord extends DialogFragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.execSQL("INSERT INTO user VALUES('" +setblood.getText()+ "','datetime()');");
+                db.execSQL("INSERT INTO user VALUES('" +setblood.getText()+ "',datetime());");
                 Toast.makeText(view.getContext(),"Blood Pressure updated!",Toast.LENGTH_SHORT).show();
 
 
