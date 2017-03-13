@@ -34,10 +34,11 @@ public class HomeFragment extends Fragment {
         TextView record = (TextView)view.findViewById(R.id.bloodrecord);
 
         Cursor c = db.rawQuery("SELECT * FROM user ORDER BY time DESC LIMIT 1",null);
-        StringBuffer buffer = new StringBuffer();
+        c.close();
+        StringBuilder buffer = new StringBuilder();
         if(c.moveToFirst()) {
             buffer.append(c.getString(0));
-
+            buffer.append(c.getString(1));
             bloodpressure.setText(buffer.toString());
         }else {
             bloodpressure.setText("--/--");
@@ -53,10 +54,12 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         Cursor c = db.rawQuery("SELECT * FROM user ORDER BY time DESC LIMIT 1",null);
-                        StringBuffer buffer = new StringBuffer();
+                        c.close();
+                        StringBuilder stringbuilder = new StringBuilder();
                         if(c.moveToFirst()) {
-                            buffer.append(c.getString(0));
-                            bloodpressure.setText(buffer.toString());
+                            stringbuilder.append(c.getString(0));
+                            stringbuilder.append(c.getString(1));
+                            bloodpressure.setText(stringbuilder.toString());
                         }else {
                             bloodpressure.setText("--/--");
                         }
