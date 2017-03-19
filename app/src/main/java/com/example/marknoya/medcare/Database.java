@@ -1,27 +1,114 @@
 package com.example.marknoya.medcare;
-import android.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.app.AlertDialog.Builder;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
-public class Database extends AppCompatActivity {
 
-    SQLiteDatabase db;
+public class Database extends SQLiteOpenHelper {
 
-    public void recordBlood(String blood){
+    public static final String TAG = Database.class.getSimpleName();
+    public static final String DB_NAME = "MedCare.db";
+    public static final int DB_VERSION = 1;
 
-        db = openOrCreateDatabase("appDB",Context.MODE_PRIVATE,null);
+    public static final String USER_TABLE = "user";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_EMAIL = "email";
+    public static final String COLUMN_PASS = "password";
+
+    /*
+       create table users(
+        ip integer primary key autoincrement,
+        email text,
+        password text);
+     */
+
+    public static final String CREATE_TABLE_USERS = "CREATE TABLE " + USER_TABLE + "("
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_NAME + " TEXT,"
+            + COLUMN_EMAIL + " TEXT,"
+            + COLUMN_PASS + " TEXT)";
+
+
+
+    public Database(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_USERS);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("DROP TABLE IF EXIST " + USER_TABLE);
+        onCreate(db);
+    }
+
+    /**
+     *  Storing user details in database
+     */
+    public void addUser(String name, String email, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_EMAIL, email);
+        values.put(COLUMN_PASS, password);
+
+        long id = db.insert(USER_TABLE, null, values);
+        db.close();
+
+        Log.d(TAG, "user inserted" + id);
+    }
+
+    public boolean getUser (String email, String pass) {
+        String selectQuery = "select * from " + USER_TABLE + " where "
+                + COLUMN_EMAIL + " = " + "'" + email + "'" + " and " + COLUMN_PASS + " = " + "'" + pass +"'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if(cursor.getCount() > 0){
+
+            return true;
+        }
+        cursor.close();
+        db.close();
+
+        return false;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+     public void recordBlood(String blood){
+
+        db = openOrCreateDatabase("appDB", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS user(bloodPressure VARCHAR,time VARCHAR);");
         db.execSQL("INSERT INTO student VALUES('" +blood+ "','CURRENT_TIMESTAMP');");
         Toast.makeText(this,"Blood Pressure updated!",Toast.LENGTH_SHORT);
@@ -38,13 +125,6 @@ public class Database extends AppCompatActivity {
             return "--/--";
         }
     }
-
-
-
-
-
-
-    /*
     public void onClick(View view){
         if(view == btAdd){
 

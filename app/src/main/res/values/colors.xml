@@ -2,9 +2,13 @@
 <resources>
     <color name="colorPrimary">#f44336</color>
     <color name="colorPrimaryDark">#c62828</color>
-    <color name="colorAccent">#039be5</color>
+    <color name="colorAccent">#424242</color>
+    <color name="colorAccent1">#039be5</color>
     <color name="MedCare_Green">#689f38</color>
     <color name="Background">#424242</color>
+    <color  name="whiteGrey">#FFCFCFCF</color>
+
+    <color name="iron">#CCCCCC</color>
 
     <color name="white">#FFFFFF</color>
     <color name="TabSelectedColor">#FFFF8D</color>
