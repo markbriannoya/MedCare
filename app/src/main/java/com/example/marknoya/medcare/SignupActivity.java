@@ -15,6 +15,7 @@ import android.widget.Toast;
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
     private Database db;
+    private Session session;
     EditText _nameText;
     EditText _emailText;
     EditText _passwordText;
@@ -27,6 +28,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         db = new Database(this);
+        session = new Session(this);
 
         _nameText = (EditText)findViewById(R.id.input_name);
         _emailText = (EditText)findViewById(R.id.input_email);
@@ -63,11 +65,13 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        final String name = _nameText.getText().toString();
+        final String email = _emailText.getText().toString();
+        final String password = _passwordText.getText().toString();
 
-        db.addUser(name,email,password);
+
+
+
         // TODO: Implement your own signup logic here.
 
         new android.os.Handler().postDelayed(
@@ -75,7 +79,13 @@ public class SignupActivity extends AppCompatActivity {
                     public void run() {
                         // On complete call either onSignupSuccess or onSignupFailed
                         // depending on success
-                        onSignupSuccess();
+                        if(db.checkUser(email)){
+                            onSignupFailed();
+
+                        }else {
+                            db.addUser(name,email,password);
+                            onSignupSuccess();
+                        }
                         // onSignupFailed();
                         progressDialog.dismiss();
                     }
@@ -85,12 +95,14 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        session.setLoggin(true,db.getId(_emailText.getText().toString()));
+        Toast.makeText(getBaseContext(),db.getId(_emailText.getText().toString())+"  Signup 92", Toast.LENGTH_LONG).show();
         startActivity(new Intent(getApplicationContext(),MainActivity.class));
         finish();
 
     }
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(),"Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(),"Email is already used.", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }

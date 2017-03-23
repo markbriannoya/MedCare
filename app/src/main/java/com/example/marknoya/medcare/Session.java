@@ -19,14 +19,22 @@ public class Session {
 
     }
 
-    public void setLoggin(boolean loggedin) {
+    public void setLoggin(boolean loggedin,String id) {
         editor.putBoolean("loggedInmode",loggedin);
+        editor.putString("Account",id);
         editor.commit();
+
     }
+
 
     public boolean loggedin() {
         return prefs.getBoolean("loggedInmode", false);
     }
+
+    public String userid() {
+        return prefs.getString("Account",null);
+    }
+
 
 
 }

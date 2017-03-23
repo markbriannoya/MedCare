@@ -49,13 +49,26 @@ public class MainActivity extends AppCompatActivity
     private ImageView mProfileImage;
     private int mMaxScrollSize;
 
+    private Database db;
+    private Session session;
+
     TabLayout tabLayout;
     ViewPager viewPager;
+
+
+    String[] account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        session = new Session(this);
+        db = new Database(this);
+        account = db.getUser(session.userid());
+
+        TextView name = (TextView)findViewById(R.id.name);
+        name.setText(account[0]);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,6 +95,7 @@ public class MainActivity extends AppCompatActivity
                 onBackPressed();
             }
         });
+
         AppBarLayout appbarLayout = (AppBarLayout) findViewById(R.id.materialup_appbar);
         appbarLayout.addOnOffsetChangedListener(this);
         mMaxScrollSize = appbarLayout.getTotalScrollRange();

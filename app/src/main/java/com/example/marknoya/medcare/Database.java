@@ -87,6 +87,59 @@ public class Database extends SQLiteOpenHelper {
         return false;
 
     }
+    public boolean checkUser (String email) {
+        String selectQuery = "select * from " + USER_TABLE + " where "
+                + COLUMN_EMAIL + " = " + "'" + email + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if(cursor.getCount() > 0){
+
+            return true;
+        }
+        cursor.close();
+        db.close();
+
+        return false;
+    }
+    public String getId(String email) {
+        String selectQuery = "select _id from " + USER_TABLE + " where "
+                + COLUMN_EMAIL + " = " + "'" + email + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+
+            return cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+
+        return null;
+    }
+    public String[] getUser(String userid){
+        String selectQuery = "select * from " + USER_TABLE + " where "
+                + COLUMN_ID + " = " + "'" + userid + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // Move to first row
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            String[] info = {cursor.getString(1),cursor.getString(2)};
+            return info;
+
+
+
+        }
+        cursor.close();
+        db.close();
+
+        return null;
+    }
+}
+
 
 
 
@@ -184,6 +237,6 @@ public class Database extends SQLiteOpenHelper {
         builder.setTitle(title);
         builder.setMessage(message);
         builder.show();
-    }*/
-}
+    }
+}*/
 

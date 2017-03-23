@@ -34,6 +34,7 @@
                 app:layout_scrollFlags="scroll|snap"
                 >
                 ​
+
                 <ImageView
                     android:id="@+id/materialup.profile_backdrop"
                     android:layout_width="match_parent"
@@ -79,6 +80,7 @@
                 >
                 ​
                 <TextView
+                    android:id = "@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"

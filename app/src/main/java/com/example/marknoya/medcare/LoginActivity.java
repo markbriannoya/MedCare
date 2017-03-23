@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     private Database db;
+    private Session session;
 
 
     EditText _Email;
@@ -34,6 +35,11 @@ public class LoginActivity extends AppCompatActivity {
         _Password = (EditText)findViewById(R.id.input_password);
         _BtnLogin = (Button)findViewById(R.id.btn_login);
         _SignupLink = (TextView)findViewById(R.id.link_signup);
+        session = new Session(this);
+        if(session.loggedin()){
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            finish();
+        }
 
         _BtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
+        session.setLoggin(true,db.getId(_Email.getText().toString()));
         _BtnLogin.setEnabled(true);
         startActivity(new Intent(LoginActivity.this,MainActivity.class));
         finish();
